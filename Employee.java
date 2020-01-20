@@ -5,13 +5,15 @@ public class Employee {
 	int experienceYears;
 	String favCarMake;
 	double comm;
+	double salary;
 
-	public Employee(String name, int experienceYears, String favCarMake, int comm) {
+	public Employee(String name, int experienceYears, String favCarMake, double comm, double salary) {
 		super();
 		this.name = name;
 		this.experienceYears = experienceYears;
 		this.favCarMake = favCarMake;
 		this.comm = comm;
+		this.salary = salary;
 	}
 	public void greet() {
 		System.out.println("My name's "+name);

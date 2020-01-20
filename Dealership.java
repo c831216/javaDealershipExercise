@@ -6,13 +6,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
-import java.io.IOException;
 
 public class Dealership {
 
 	public static void main(String[] args) {
-		
 		Employee employee = welcome();
+		while(true) {
+			if(startToFinish(employee)==1) {
+				employee.salary = employee.salary + employee.comm;
+				continue;
+			}
+			else {
+				System.out.println("That's it I'm out of here, see ya");
+				System.out.println("Salary R"+Math.round(employee.salary));
+				System.exit(0);
+			}
+		}
+	}
+	
+	private static int startToFinish(Employee employee) {
+//		Employee employee = welcome();
 		Customer cust1 = goMeetCustomer();
 		greetOrCompliment(employee, cust1);
 		likeliness(cust1);
@@ -29,56 +42,59 @@ public class Dealership {
 		likeliness(cust1);
 		
 //		if likeliness is higher than 60 then we can close the deal
-		goForClose(cust1.likelinessToBuy, employee.comm, cust1.budget);
-		
+		employee.salary = employee.salary + goForClose(cust1.likelinessToBuy, employee.comm, cust1.budget);
+		System.out.println("\n\n\n\n\n\n\n***SALARY***"+employee.salary);
+		if(keepSellingOrGoHome()==1) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
 //		show the money you made and 
 		
 		
 //		give option of selling to another customer or ending the day then we create new cust where you ask for the name and that's used to create the new customer :)
 		
 	}
-	
-	private static void goForClose(int likelinessToBuy, double comm, int budget) {
+	private static double goForClose(int likelinessToBuy, double comm, int budget) {
 		System.out.println("You: So, are you ready to take her home?");
 		if(likelinessToBuy < 6) {
 			System.out.println("Customer: You know what, it was a great drive but I'm not quite sure that this is exactly what I'm looking for. Thanks for your time.");
-			keepSellingOrGoHome();
+//			keepSellingOrGoHome();
+			return 0;
 		}
 		else if(likelinessToBuy >= 6) {
 			System.out.println("Customer: I'd love to take her home. Lets get all the paperwork signed");
+			System.out.println(comm);
 			comm = budget * comm;
-			System.out.println("Welldone!! You currently have: R"+comm);
-			keepSellingOrGoHome();
+			double a = comm;
+			System.out.println("Welldone!! You currently have: R"+a);
+//			keepSellingOrGoHome();
+			return a;
 		}
-		
+		return 0;
 	}
-
-	private static void keepSellingOrGoHome() {
+	private static int keepSellingOrGoHome() {
 		System.out.println("\n***What would you like to do?***\n");
 		System.out.println("\n***Choose an action***\n");
 		System.out.println("A) Try selling to another customer");
 		System.out.println("B) Go home");
 		int a = abc();	
 		if(a==0) {
-			sellCar();
+			return 1;
 		}
-		else if (a==1) {
-			System.out.println("That's it I'm out of here, see ya");
-			System.exit(0);
+		else {
+			return 0;
 		}
 	}
-
-	private static void sellCar() {
-		System.out.println("This is where we ask for name and create a new customer");
-		
-	}
-
 	public static String input(){ 
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
  		String s = sc.nextLine();
 		return s;
  	} 
 	public static int inputInt(){ 
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
         int num = scan.nextInt();
         return num;
@@ -97,7 +113,7 @@ public class Dealership {
 		randomElement = givenList.get(rand.nextInt(givenList.size()));
 		String b = make[randomElement];
 		randomElement = givenList.get(rand.nextInt(givenList.size()));
-		String tmp = make[randomElement];
+//		String tmp = make[randomElement];
 		
 		
 		while (true) {
@@ -248,14 +264,14 @@ System.out.println("\nSo we don't like wasting any time around here because time
 		System.out.println("Welcome to your first day at Mikes Automobiles Dealership\n");
 		System.out.println("First thing's first, please fill in the following details so that we can create you profile on our database so that we can make sure you get the commission that you deserve.\n");
 		
-		Employee employee = new Employee(null, 0, null, 0);
+		Employee employee = new Employee(null, 0, null, 0,0);
 		System.out.print("First name: ");
 		employee.name = input();
 		System.out.print("How many years experience do you have in selling cars: ");
 		employee.experienceYears = inputInt();
 		System.out.print("What's your favourite Car Make: ");
 		employee.favCarMake = input();
-		employee.comm = 0;
+		employee.comm = 0.0;
 		if (employee.experienceYears < 1) {
 			employee.comm = 0.10;
 		}
@@ -268,6 +284,7 @@ System.out.println("\nSo we don't like wasting any time around here because time
 		else {
 			employee.comm = .30;
 		}
+		System.out.println("\n\n\n\n\n\n****"+employee.comm);
 			
 		System.out.println("\nWelcome onboard "+employee.name+" based on your "+employee.experienceYears+" years experience you will receive "+Math.round(employee.comm*100)+" percent of the value of any car you sell. I'm also glad to hear that your favourite car make is "+employee.favCarMake+" because it could help you seal the deal when your potential customer also likes the same car make.");
 		return employee;
